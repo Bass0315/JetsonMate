@@ -46,10 +46,20 @@ def displayResult(flag):
         print (" - - - - - - - - - - - - - - - - - - - - ") 
 
 
-# Master USB
-print (time.strftime(" %H:%M:%S ", time.localtime()) + "- - Master USB Test- -") 
+# Master USB2.0
+print (time.strftime(" %H:%M:%S ", time.localtime()) + "- - Master USB2.0 Test- -") 
+if timeout_command("lsusb", 10) == 0:  
+    if "2886:800b" in str(Comunicate) and "10c4:ea60" in str(Comunicate):
+        displayResult(True)
+    else:
+        displayResult(False)
+else:
+    displayResult(False)
+
+# Master USB3.0
+print (time.strftime(" %H:%M:%S ", time.localtime()) + "- - Master USB3.0 Test- -") 
 if timeout_command("ls /dev/", 10) == 0:  
-    if "ttyUSB" in str(Comunicate):
+    if "sd" in str(Comunicate):
         displayResult(True)
     else:
         displayResult(False)

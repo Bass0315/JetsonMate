@@ -25,7 +25,7 @@ stty -F $(ls /dev/ttyACM*) raw speed 115200
 # Background temporary
 echo "" > temporary.log
 cat $(ls /dev/ttyACM*) >> temporary.log &
-temporary_process=$!
+ttyACM_process=$!
 
 python3 master.py
 
@@ -33,9 +33,18 @@ python3 master.py
 echo " $(date +%T) - - Master ADC Test- -"
 echo "ADC_Power" > $(ls /dev/ttyACM*)
 sleep 3
-cat temporary.log
-echo "" > temporary.log
+#cat temporary.log
+if [ `grep -c "Error" temporary.log` -ne '0' ];then
+	grep -w "Error" temporary.log    # Display error
+	displayResul 0
+else
+	grep -w "OK" temporary.log
+	displayResul 1
+fi
 
+echo "" > temporary.log
+kill -9 "${ttyACM_process}"
+sleep 0.1
 
 if (( $(cat /sys/devices/pwm-fan/tach_enable) == 0 ));then
 	echo 1 >  /sys/devices/pwm-fan/tach_enable
@@ -76,11 +85,61 @@ else
 fi
 echo 10 >  /sys/devices/pwm-fan/target_pwm
 
-kill -9 "$temporary_process"
 
 
-# Get master ip
+#Master eth
+# echo " $(date +%T) - - Master Eth Test- -"
+# ping -c 3 www.baidu.com
+# if [ "$?" -eq 0 ]; then
+	# displayResul 1
+# else
+	# displayResul 0
+# fi
+
+#get ip
 ifconfig eth0 > ip.log
-echo $(sed -n '2,2p' ip.log | cut -c 14-28) > ip.log   #get ip
+echo $(sed -n '2,2p' ip.log | cut -c 14-28) > ip.log   
 
-# echo $(cat ip.log) > $(sudo ls /dev/ttyUSB*)    #seed ip
+
+# Start Worker test
+stty -F /dev/ttyUSB0 raw speed 115200
+stty -F /dev/ttyUSB0 raw speed 115200
+
+# echo "" > temporary.log
+# cat $(ls /dev/ttyS0) >> temporary.log &
+# tttyS0_process=$!
+# pkill -9 "${tttyS0_process}"
+
+echo "Worker start" >> ip.log
+echo $(cat ip.log) > /dev/ttyUSB0    #seed ip
+iperf3 -s -D -i 1
+sleep 15
+pkill iperf3
+
+# Worker report
+for loop  in 1 2 3
+do 
+	ls Worker* > temporary.log
+	if [ `grep -c "Worker${loop}" temporary.log` -ne '0' ];then
+		if (( ${loop} == 1 )); then
+			echo " $(date +%T) - - Master Eth Test- -"
+			displayResul 1
+		fi
+		
+		echo " $(date +%T) - - Worker${loop} Test- -"
+		cat Worker${loop}.log > temporary.log
+		if [ `grep -c "Error" temporary.log` -ne '0' ];then
+			grep -w "Error" Worker${loop}.log    # Display error
+			displayResul 0
+		else
+			grep -w "OK" Worker${loop}.log
+			displayResul 1
+		fi
+	else
+		echo " $(date +%T) - - Worker${loop} - -"
+		displayResul 0
+	fi
+done
+
+rm -rf Worker*
+
