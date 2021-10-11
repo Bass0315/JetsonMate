@@ -16,6 +16,17 @@ function displayResul(){
 	fi
 }
 
+# Get master ip
+ifconfig eth0 > ip.log
+echo $(sed -n '2,2p' ip.log | cut -c 14-28) > ip.log 
+
+# Start Worker test
+stty -F /dev/ttyUSB0 raw speed 115200
+stty -F /dev/ttyUSB0 raw speed 115200
+echo "Worker start" >> ip.log
+echo $(cat ip.log) > /dev/ttyUSB0    #seed ip
+
+
 stty -F $(ls /dev/ttyACM*) raw speed 115200
 stty -F $(ls /dev/ttyACM*) raw speed 115200
 stty -F $(ls /dev/ttyACM*) raw speed 115200
@@ -85,21 +96,10 @@ else
 fi
 echo 10 >  /sys/devices/pwm-fan/target_pwm
 
-
-
-#Master eth
-# echo " $(date +%T) - - Master Eth Test- -"
-# ping -c 3 www.baidu.com
-# if [ "$?" -eq 0 ]; then
-	# displayResul 1
-# else
-	# displayResul 0
-# fi
-
-#get ip
+:<<!
+# Get master ip
 ifconfig eth0 > ip.log
 echo $(sed -n '2,2p' ip.log | cut -c 14-28) > ip.log   
-
 
 # Start Worker test
 stty -F /dev/ttyUSB0 raw speed 115200
@@ -110,11 +110,14 @@ stty -F /dev/ttyUSB0 raw speed 115200
 # tttyS0_process=$!
 # pkill -9 "${tttyS0_process}"
 
+# 
 echo "Worker start" >> ip.log
 echo $(cat ip.log) > /dev/ttyUSB0    #seed ip
-iperf3 -s -D -i 1
-sleep 15
-pkill iperf3
+#iperf3 -s -D -i 1
+sleep 30
+#pkill iperf3
+!
+sleep 10
 
 # Worker report
 for loop  in 1 2 3
@@ -130,6 +133,7 @@ do
 		cat Worker${loop}.log > temporary.log
 		if [ `grep -c "Error" temporary.log` -ne '0' ];then
 			grep -w "Error" Worker${loop}.log    # Display error
+			grep -w "OK" Worker${loop}.log
 			displayResul 0
 		else
 			grep -w "OK" Worker${loop}.log

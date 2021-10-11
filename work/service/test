@@ -1,0 +1,5 @@
+#!/bin/bash
+cd /home/pi/worker
+source ~/.bashrc
+./main.sh
+exit 0

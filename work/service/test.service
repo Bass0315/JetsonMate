@@ -1,0 +1,11 @@
+[Unit]
+Description=factory test auto start Service
+
+[Service]
+User=root
+Type=simple
+ExecStart=/bin/bash /usr/bin/test
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

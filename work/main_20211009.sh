@@ -22,15 +22,27 @@ do
 			
 		# USB3.0
 		ls  /dev/sd* > temporary.log
-		if [ `grep -c "/dev/sd" temporary.log` -ne '0' ];then  #Count the number of columns that match the style.
-			echo "mount sd*"
-			mount $(sed -n '2,2p' temporary.log) /mnt/ 
-			cp /mnt/Worker* .
-			echo "" > Worker*
-			echo "USB3.0 OK" >> Worker*
+		if [ "$?" -eq 0 ]; then
+			if [ `grep -c "/dev/sd" temporary.log` -ne '0' ];then  #Count the number of columns that match the style.
+				echo "mount sd*"
+				mount $(sed -n '2,2p' temporary.log) /mnt/ 
+				if [ "$?" -eq 0 ]; then
+					cp /mnt/Worker* .
+					echo "" > Worker*
+					echo $(date "+%Y-%m-%d %H:%M:%S") >> Worker*
+					echo "USB3.0 OK" >> Worker*
+				else
+					echo $(date "+%Y-%m-%d %H:%M:%S") >> Worker*
+					echo "USB3.0 Error" >> Worker*
+				fi
+			else
+				echo "USB3.0 Error" >> Worker*
+			fi
 		else
-			echo "USB3.0 Error" >> Worker*
+		
 		fi
+		
+
 		echo "" > temporary.log
 		
 		# Fan 
