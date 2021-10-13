@@ -30,7 +30,7 @@ def timeout_command(command, timeout):
     Comunicate = process.communicate()    
     return resultcode
     
-    
+"""   
 def displayResult(flag):
     if flag == True:
         print (" - - - - - - - - - - - - - - - - - - - - ")
@@ -44,27 +44,45 @@ def displayResult(flag):
         print (" -               failed                - ")
         print (" -                                     - ")
         print (" - - - - - - - - - - - - - - - - - - - - ") 
+"""
+def displayResult(flag):
+    if flag == True:
+        print (" -      -       -       -       -       -")
+        print (" -                                      -")
+        print (" -\033[32m              succssed                \033[0m-")
+        print (" -                                      -")
+        print (" -      -       -       -       -       -")
+    else:
+        print (" -      -       -       -       -       -")
+        print (" -                                      -")
+        print (" -\033[31m              failed                  \033[0m-")
+        print (" -                                      -")
+        print (" -      -       -       -       -       -")
 
 
 # Master USB2.0
-print (time.strftime(" %H:%M:%S ", time.localtime()) + "- - Master USB2.0 Test- -") 
+
 if timeout_command("lsusb", 10) == 0:  
-    if "2886:800b" in str(Comunicate) and "10c4:ea60" in str(Comunicate):
+    print (time.strftime(" %H:%M:%S ", time.localtime()) + "- - Master USB2.0 Test- -") 
+    if "2886:800b" in str(Comunicate):
+        displayResult(True)
+    else:
+        displayResult(False)
+        
+    print (time.strftime(" %H:%M:%S ", time.localtime()) + "- - Master USB3.0 Test- -") 
+    if "SanDisk Corp" in str(Comunicate):
+        displayResult(True)
+    else:
+        displayResult(False)
+    
+    print (time.strftime(" %H:%M:%S ", time.localtime()) + "- - Master Micro Test- -") 
+    if "NVidia Corp" in str(Comunicate):
         displayResult(True)
     else:
         displayResult(False)
 else:
     displayResult(False)
 
-# Master USB3.0
-print (time.strftime(" %H:%M:%S ", time.localtime()) + "- - Master USB3.0 Test- -") 
-if timeout_command("ls /dev/", 10) == 0:  
-    if "sd" in str(Comunicate):
-        displayResult(True)
-    else:
-        displayResult(False)
-else:
-    displayResult(False)
 
 # Master IIC
 print (time.strftime(" %H:%M:%S ", time.localtime()) + "- - Master IIC Test- -") 

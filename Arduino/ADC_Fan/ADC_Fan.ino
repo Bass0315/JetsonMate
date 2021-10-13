@@ -24,18 +24,18 @@ void ADC_Power(void)
       val += analogRead(analogPin[i]);
     }
     analogValue = val / 5 / 1023.0 * 3.3 * (1.8 / 0.3);
-
+    Serial.print(analogValue);
     switch (i)
     {
       case 0:
         {
           if (1.8 - 1.8 * 0.05 < analogValue && analogValue < 1.8 + 1.8 * 0.05)
           {
-            Serial.println("1V8 OK");
+            Serial.println("   1V8 OK");
           }
           else
           {
-            Serial.println("1V8 Error");
+            Serial.println("   1V8 Error");
           }
           break;
         }
@@ -43,11 +43,11 @@ void ADC_Power(void)
         {
           if (2.5 - 2.5 * 0.05 < analogValue && analogValue < 2.5 + 2.5 * 0.05)
           {
-            Serial.println("2V5 OK");
+            Serial.println("   2V5 OK");
           }
           else
           {
-            Serial.println("2V5 Error");
+            Serial.println("   2V5 Error");
           }
           break;
         }
@@ -55,11 +55,11 @@ void ADC_Power(void)
         {
           if (1.2 - 1.2 * 0.05 < analogValue && analogValue < 1.2 + 1.2 * 0.05)
           {
-            Serial.println("1V2 OK");
+            Serial.println("   1V2 OK");
           }
           else
           {
-            Serial.println("1V2 Error");
+            Serial.println("   1V2 Error");
           }
           break;
         }
@@ -67,11 +67,11 @@ void ADC_Power(void)
         {
           if (3.3 - 3.3 * 0.05 < analogValue && analogValue < 3.3 + 3.3 * 0.05)
           {
-            Serial.println("3V3 OK");
+            Serial.println("   3V3 OK");
           }
           else
           {
-            Serial.println("3V3 Error");
+            Serial.println("   3V3 Error");
           }
           break;
         }
@@ -79,11 +79,11 @@ void ADC_Power(void)
         {
           if (5 - 5 * 0.05 < analogValue && analogValue < 5 + 5 * 0.05)
           {
-            Serial.println("5 V OK");
+            Serial.println("   5 V OK");
           }
           else
           {
-            Serial.println("5 V Error");
+            Serial.println("   5 V Error");
           }
           break;
         }
@@ -91,11 +91,11 @@ void ADC_Power(void)
         {
           if (12 - 12 * 0.05 < analogValue && analogValue < 12 + 12 * 0.05)
           {
-            Serial.println("12V OK");
+            Serial.println("  12V OK");
           }
           else
           {
-            Serial.println("12V Error");
+            Serial.println("  12V Error");
           }
           break;
         }

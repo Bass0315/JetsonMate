@@ -33,7 +33,7 @@ def timeout_command(command, timeout):
     Comunicate = process.communicate()    
     return resultcode
     
-    
+"""    
 def displayResult(flag):
     if flag == True:
         print (" - - - - - - - - - - - - - - - - - - - - ")
@@ -49,7 +49,7 @@ def displayResult(flag):
         print (" - - - - - - - - - - - - - - - - - - - - ") 
 
 
-"""
+
 def FanEvent_callback(n):
     global result_flag
     result_flag += 1
@@ -65,7 +65,21 @@ def FanEvent_callback(n):
                 os.system("echo 'Fan OK' >> Worker3.log")
             else:
                 pass
-"""               
+""" 
+def displayResult(flag):
+    if flag == True:
+        print (" -      -       -       -       -       -")
+        print (" -                                      -")
+        print (" -\033[32m              succssed                \033[0m-")
+        print (" -                                      -")
+        print (" -      -       -       -       -       -")
+    else:
+        print (" -      -       -       -       -       -")
+        print (" -                                      -")
+        print (" -\033[31m              failed                  \033[0m-")
+        print (" -                                      -")
+        print (" -      -       -       -       -       -")
+              
     
     
 def WriteResult(user_str): 

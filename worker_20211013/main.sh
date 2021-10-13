@@ -8,7 +8,7 @@ sleep 40
 
 # Eth
 ifconfig eth0 > temporary.log
-if [ `grep -c "192.168" temporary.log` -ne '0' ];then
+if [ `grep -c "inet 192.168" temporary.log` -ne '0' ];then
 	touch Worker$(sed -n '2,2p' temporary.log | cut -c 28-28).log
 	echo Worker$(sed -n '2,2p' temporary.log | cut -c 28-28)__$(sed -n '2,2p' temporary.log | cut -c 14-28)__$(date "+%Y-%m-%d %H:%M:%S") >> Worker*
 	echo $(sed -n '2,2p' temporary.log | cut -c 14-28) >> Worker*	# Get Worker ip to Worker*.log
